@@ -63,12 +63,12 @@ const AppBarContent = (props: Props) => {
             target='_blank'
             rel='noreferrer'
             sx={{ mr: 4, display: 'flex' }}
-            href='https://github.com/themeselection/materio-mui-react-nextjs-admin-template-free'
+            href='https://github.com/bjc1102/job-application-tracker'
           >
             <img
               height={24}
-              alt='github stars'
-              src='https://img.shields.io/github/stars/themeselection/materio-mui-react-nextjs-admin-template-free?style=social'
+              alt='github repo'
+              src='https://img.shields.io/badge/GitHub-bjc1102%2Fjob--application--tracker-black?style=flat&color=white'
             />
           </Box>
         )}
