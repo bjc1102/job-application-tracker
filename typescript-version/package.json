@@ -19,21 +19,16 @@
   "keywords": [
     "react",
     "javascript",
-    "admin",
     "typescript",
     "dashboard",
     "material-design",
     "nextjs",
     "material-ui",
     "admin-dashboard",
-    "free",
     "mui",
     "admin-template",
     "admin-panel",
-    "freebies",
-    "nextjs-template",
-    "react-dashboard",
-    "themeselection"
+    "react-dashboard"
   ],
   "scripts": {
     "dev": "next dev",
