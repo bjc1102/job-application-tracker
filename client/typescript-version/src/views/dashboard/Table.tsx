@@ -12,6 +12,7 @@ import TableContainer from '@mui/material/TableContainer'
 
 // ** Types Imports
 import { ThemeColor } from 'src/@core/layouts/types'
+import { Button } from '@mui/material'
 
 interface RowType {
   age: number
@@ -114,7 +115,7 @@ const statusObj: StatusObj = {
 
 const DashboardTable = () => {
   return (
-    <Card>
+    <Card sx={{ borderRadius: '0px' }}>
       <TableContainer>
         <Table sx={{ minWidth: 800 }} aria-label='table in dashboard'>
           <TableHead>
@@ -157,6 +158,14 @@ const DashboardTable = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Button
+        variant='outlined'
+        color='primary'
+        onClick={() => console.log(123)}
+        sx={{ marginTop: 2, width: '100%', borderRadius: '0px' }} // 버튼 스타일을 조정하고 width를 100%로 설정합니다.
+      >
+        추가하기
+      </Button>
     </Card>
   )
 }
