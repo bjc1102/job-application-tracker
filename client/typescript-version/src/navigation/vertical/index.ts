@@ -31,8 +31,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Login',
       icon: Login,
-      path: '/pages/login',
-      openInNewTab: true
+      path: '/login'
     },
     {
       title: 'Register',

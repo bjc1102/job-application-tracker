@@ -1,9 +1,6 @@
 // ** React Imports
 import { ReactNode } from 'react'
 
-// ** Next Imports
-import { useRouter } from 'next/router'
-
 // ** MUI Components
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
@@ -24,6 +21,7 @@ import BlankLayout from 'src/@core/layouts/BlankLayout'
 
 // ** Demo Imports
 import FooterIllustrationsV1 from 'src/views/pages/auth/FooterIllustration'
+import { googleLoginURL } from 'src/static/route'
 
 // ** Styled Components
 const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
@@ -33,7 +31,6 @@ const Card = styled(MuiCard)<CardProps>(({ theme }) => ({
 const LoginPage = () => {
   // ** Hook
   const theme = useTheme()
-  const router = useRouter()
 
   return (
     <Box className='content-center'>
@@ -133,7 +130,7 @@ const LoginPage = () => {
                     backgroundColor: 'whitesmoke' // 호버 시 배경색 변경
                   }
                 }}
-                onClick={() => router.push('/')}
+                onClick={() => (window.location.href = googleLoginURL)}
               >
                 <Google sx={{ color: '#db4437', marginRight: 2 }} />
                 Sign in with Google
