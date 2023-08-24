@@ -8,7 +8,7 @@ import {
 import { ApplicationEntity } from './application.entity';
 
 @Entity({ name: 'History' })
-export class History {
+export class HistoryEntity {
   @PrimaryGeneratedColumn()
   id: number;
 

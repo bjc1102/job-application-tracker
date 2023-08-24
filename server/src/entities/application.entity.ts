@@ -6,8 +6,8 @@ import {
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { UserEntitiy } from './user.entity';
-import { History } from './history.entity';
+import { UserEntity } from './user.entity';
+import { HistoryEntity } from './history.entity';
 
 @Entity({ name: 'Application' })
 export class ApplicationEntity {
@@ -26,12 +26,12 @@ export class ApplicationEntity {
   @Column({ name: 'end_date', type: 'date', nullable: true, default: null })
   end_date: Date | null;
 
-  @OneToMany(() => History, (history) => history.application)
-  histories: History[];
+  @OneToMany(() => HistoryEntity, (history) => history.application)
+  histories: HistoryEntity[];
 
-  @ManyToOne(() => UserEntitiy, (user) => user.applications, {
+  @ManyToOne(() => UserEntity, (user) => user.applications, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
-  user: UserEntitiy;
+  user: UserEntity;
 }
