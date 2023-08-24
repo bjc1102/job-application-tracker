@@ -5,7 +5,7 @@ import {
   JoinColumn,
   ManyToOne,
 } from 'typeorm';
-import { Application } from './application.entity';
+import { ApplicationEntity } from './application.entity';
 
 @Entity({ name: 'History' })
 export class History {
@@ -18,7 +18,7 @@ export class History {
   @Column({ name: 'status_create_date', type: 'date' })
   status_create_date: Date;
 
-  @ManyToOne(() => Application, (application) => application.histories)
+  @ManyToOne(() => ApplicationEntity, (application) => application.histories)
   @JoinColumn({ name: 'application_id', referencedColumnName: 'id' })
-  application: Application;
+  application: ApplicationEntity;
 }

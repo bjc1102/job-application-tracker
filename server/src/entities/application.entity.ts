@@ -2,16 +2,15 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  Index,
   ManyToOne,
   JoinColumn,
   OneToMany,
 } from 'typeorm';
-import { User } from './user.entity';
+import { UserEntitiy } from './user.entity';
 import { History } from './history.entity';
 
 @Entity({ name: 'Application' })
-export class Application {
+export class ApplicationEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -30,7 +29,9 @@ export class Application {
   @OneToMany(() => History, (history) => history.application)
   histories: History[];
 
-  @ManyToOne(() => User, (user) => user.applications, { onDelete: 'CASCADE' })
+  @ManyToOne(() => UserEntitiy, (user) => user.applications, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
-  user: User;
+  user: UserEntitiy;
 }

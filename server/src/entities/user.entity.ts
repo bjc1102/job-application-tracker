@@ -1,9 +1,9 @@
 import { PrimaryGeneratedColumn, Entity, Column, OneToMany } from 'typeorm';
 import { RefreshToken } from './refreshToken.entity';
-import { Application } from './application.entity';
+import { ApplicationEntity } from './application.entity';
 
 @Entity({ name: 'User' })
-export class User {
+export class UserEntitiy {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -19,6 +19,6 @@ export class User {
   @OneToMany(() => RefreshToken, (token) => token.user)
   refreshTokens: RefreshToken[];
 
-  @OneToMany(() => Application, (application) => application.user)
-  applications: Application[];
+  @OneToMany(() => ApplicationEntity, (application) => application.user)
+  applications: ApplicationEntity[];
 }
