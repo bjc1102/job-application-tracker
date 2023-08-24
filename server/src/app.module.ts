@@ -7,7 +7,14 @@ import * as path from 'path';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath:
+        process.env.NODE_ENV === 'development' ? './.env.dev' : './.env',
+    }),
     TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         retryAttempts: 10,
         type: 'mysql',
@@ -21,11 +28,6 @@ import * as path from 'path';
         logging: true,
         timezone: 'local',
       }),
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath:
-        process.env.NODE_ENV === 'development' ? './.env.dev' : './.env',
     }),
     AuthModule,
   ],
