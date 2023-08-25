@@ -5,6 +5,7 @@ import { User } from './utils/user.decorator';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { cookieOption, refreshTokenCookieOption } from './utils/cookie.option';
+import { JwtPayload } from './types/token.interface';
 
 @Controller('/auth')
 export class AuthController {
@@ -28,5 +29,13 @@ export class AuthController {
     res.cookie('refreshToken', refreshToken, refreshTokenCookieOption);
 
     res.redirect(this.configService.get('DOMAIN'));
+  }
+
+  @Get('refresh')
+  @UseGuards(AuthGuard('refresh'))
+  async generateNewToken(@User() payload: JwtPayload, @Res() res: Response) {
+    const token = await this.authService.refreshAccessToken(payload);
+
+    res.cookie('authToken', token, cookieOption);
   }
 }

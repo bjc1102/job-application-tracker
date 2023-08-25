@@ -13,7 +13,10 @@ export class RefreshTokenEntity {
   id: number;
 
   @Column()
-  token: string;
+  iat: number;
+
+  @Column()
+  exp: number;
 
   @ManyToOne(() => UserEntity, (user) => user.refreshTokens)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })

@@ -10,7 +10,8 @@ export class UserController {
 
   @Get('test')
   @UseGuards(AuthGuard('refresh'))
-  getUserData(@User() payload: JwtPayload) {
+  async getUserData(@User() payload: JwtPayload) {
     console.log(payload);
+    return await this.userService.findUserData(payload.email);
   }
 }
