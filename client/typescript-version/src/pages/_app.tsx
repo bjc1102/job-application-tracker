@@ -3,7 +3,6 @@ import Head from 'next/head'
 import { Router } from 'next/router'
 import type { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 // ** Loader Import
 import NProgress from 'nprogress'
@@ -24,6 +23,11 @@ import { SettingsConsumer, SettingsProvider } from 'src/@core/context/settingsCo
 
 // ** Utils Imports
 import { createEmotionCache } from 'src/@core/utils/create-emotion-cache'
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 // ** React Perfect Scrollbar Style
 import 'react-perfect-scrollbar/dist/css/styles.css'
@@ -56,7 +60,17 @@ if (themeConfig.routingLoader) {
 // ** Configure JSS & ClassName
 const App = (props: ExtendedAppProps) => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
-  const [queryClient] = useState(() => new QueryClient())
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+            retry: 0
+          }
+        }
+      })
+  )
 
   // Variables
   const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
@@ -77,7 +91,16 @@ const App = (props: ExtendedAppProps) => {
         <SettingsProvider>
           <SettingsConsumer>
             {({ settings }) => {
-              return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
+              return (
+                <ThemeComponent settings={settings}>
+                  {getLayout(
+                    <>
+                      <Component {...pageProps} />
+                      <ToastContainer />
+                    </>
+                  )}
+                </ThemeComponent>
+              )
             }}
           </SettingsConsumer>
         </SettingsProvider>
