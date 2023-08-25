@@ -4,7 +4,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { User } from './utils/user.decorator';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
-import { JwtPayload } from './types/token.interface';
 
 @Controller('/auth')
 export class AuthController {
@@ -21,13 +20,16 @@ export class AuthController {
 
   @Get('google/redirect')
   @UseGuards(AuthGuard('google'))
-  async GoogleOAuthRedirect(@User() user, @Res() res: Response) {
-    res.redirect(this.configService.get('DOMAIN'));
-  }
+  async GoogleOAuthRedirect(@User() user: GoogleUser, @Res() res: Response) {
+    const { token, refreshToken } = await this.authService.registerUser(user);
+    const sevenDaysInSeconds = 7 * 24 * 60 * 60;
 
-  @Get('check')
-  @UseGuards(AuthGuard('jwt'))
-  async TokenTest() {
-    return '1234';
+    res.cookie('authToken', token, { httpOnly: true });
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      expires: new Date(Date.now() + sevenDaysInSeconds * 1000),
+    });
+
+    res.redirect(this.configService.get('DOMAIN'));
   }
 }

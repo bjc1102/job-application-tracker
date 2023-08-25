@@ -11,7 +11,7 @@ export class UserEntity {
   email: string;
 
   @Column()
-  Name: string;
+  name: string;
 
   @Column()
   imageUrl: string;
