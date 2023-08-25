@@ -37,5 +37,7 @@ export class AuthController {
     const token = await this.authService.refreshAccessToken(payload);
 
     res.cookie('authToken', token, cookieOption);
+
+    return res.send({ message: '토큰 발급' });
   }
 }

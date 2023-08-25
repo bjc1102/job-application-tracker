@@ -9,7 +9,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get('test')
-  @UseGuards(AuthGuard('refresh'))
+  @UseGuards(AuthGuard('jwt'))
   async getUserData(@User() payload: JwtPayload) {
     console.log(payload);
     return await this.userService.findUserData(payload.email);
