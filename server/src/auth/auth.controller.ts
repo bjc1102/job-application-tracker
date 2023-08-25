@@ -4,6 +4,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { User } from './utils/user.decorator';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
+import { cookieOption, refreshTokenCookieOption } from './utils/cookie.option';
 
 @Controller('/auth')
 export class AuthController {
@@ -22,13 +23,9 @@ export class AuthController {
   @UseGuards(AuthGuard('google'))
   async GoogleOAuthRedirect(@User() user: GoogleUser, @Res() res: Response) {
     const { token, refreshToken } = await this.authService.registerUser(user);
-    const sevenDaysInSeconds = 7 * 24 * 60 * 60;
 
-    res.cookie('authToken', token, { httpOnly: true });
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      expires: new Date(Date.now() + sevenDaysInSeconds * 1000),
-    });
+    res.cookie('authToken', token, cookieOption);
+    res.cookie('refreshToken', refreshToken, refreshTokenCookieOption);
 
     res.redirect(this.configService.get('DOMAIN'));
   }

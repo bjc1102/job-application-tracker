@@ -6,13 +6,14 @@ import { AuthController } from './auth.controller';
 import { TokenStrategy } from './utils/token.strategy';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from 'src/entities/user.entity';
+import { RefreshTokenStrategy } from './utils/refreshToken.strategy';
 
 @Module({
   imports: [
     PassportModule.register({ defaultStrategy: 'google' }),
     TypeOrmModule.forFeature([UserEntity]),
   ],
-  providers: [GoogleStrategy, AuthService, TokenStrategy],
+  providers: [GoogleStrategy, AuthService, TokenStrategy, RefreshTokenStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}
