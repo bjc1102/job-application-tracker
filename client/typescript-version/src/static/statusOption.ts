@@ -15,3 +15,10 @@ export const statusOptions = [
   '최종합격',
   '최종불합격'
 ]
+
+export const statusColorOption = (status: string) => {
+  if (status.includes('불합격')) return 'warning'
+  if (status.includes('합격')) return 'success'
+
+  return 'primary'
+}

@@ -17,7 +17,7 @@ import {
   SelectChangeEvent
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
-import { statusOptions } from 'src/static/statusOption'
+import { statusColorOption, statusOptions } from 'src/static/statusOption'
 
 export default function ApplicationForm() {
   const [selectedOptions, setSelectedOptions] = React.useState('')
@@ -25,15 +25,6 @@ export default function ApplicationForm() {
   const handleOptionSelect = (event: SelectChangeEvent<string>) => {
     setSelectedOptions(event.target.value)
   }
-
-  const statusText = (status: string) => {
-    if (status.includes('불합격')) return 'warning'
-    if (status.includes('합격')) return 'success'
-
-    return 'primary'
-  }
-
-  console.log(statusText('면접합격'))
 
   return (
     <Dialog open>
@@ -91,7 +82,7 @@ export default function ApplicationForm() {
                   <div>
                     <Chip
                       label={selectedOptions}
-                      color={statusText(selectedOptions)}
+                      color={statusColorOption(selectedOptions)}
                       sx={{
                         height: 24,
                         fontSize: '0.75rem',
