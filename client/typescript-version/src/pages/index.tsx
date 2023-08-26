@@ -10,6 +10,8 @@ import Trophy from 'src/views/dashboard/Trophy'
 import StatisticsCard from 'src/views/dashboard/StatisticsCard'
 import useUserProfile from 'src/hooks/queries/useUserProfile'
 
+import ApplicationForm from 'src/@core/components/modal/ApplicationForm'
+
 const Dashboard = () => {
   const { data: user } = useUserProfile()
 
@@ -17,6 +19,7 @@ const Dashboard = () => {
 
   return (
     <ApexChartWrapper>
+      <ApplicationForm />
       <Grid container spacing={6}>
         <Grid item xs={12} md={4}>
           <Trophy />
