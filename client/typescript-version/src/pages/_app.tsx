@@ -29,6 +29,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+
 // ** React Perfect Scrollbar Style
 import 'react-perfect-scrollbar/dist/css/styles.css'
 
@@ -95,8 +98,10 @@ const App = (props: ExtendedAppProps) => {
                 <ThemeComponent settings={settings}>
                   {getLayout(
                     <>
-                      <Component {...pageProps} />
-                      <ToastContainer />
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <Component {...pageProps} />
+                        <ToastContainer />
+                      </LocalizationProvider>
                     </>
                   )}
                 </ThemeComponent>
