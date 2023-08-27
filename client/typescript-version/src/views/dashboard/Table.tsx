@@ -113,7 +113,11 @@ const statusObj: StatusObj = {
   professional: { color: 'success' }
 }
 
-const DashboardTable = () => {
+interface DashboardTableProps {
+  handleModal: () => void
+}
+
+const DashboardTable = ({ handleModal }: DashboardTableProps) => {
   return (
     <Card sx={{ borderRadius: '0px' }}>
       <TableContainer>
@@ -161,7 +165,7 @@ const DashboardTable = () => {
       <Button
         variant='outlined'
         color='primary'
-        onClick={() => console.log(123)}
+        onClick={handleModal}
         sx={{ marginTop: 2, width: '100%', borderRadius: '0px' }} // 버튼 스타일을 조정하고 width를 100%로 설정합니다.
       >
         추가하기

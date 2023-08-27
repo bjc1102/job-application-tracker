@@ -1,3 +1,5 @@
+import { useState } from 'react'
+
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
 
@@ -8,18 +10,22 @@ import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 import Table from 'src/views/dashboard/Table'
 import Trophy from 'src/views/dashboard/Trophy'
 import StatisticsCard from 'src/views/dashboard/StatisticsCard'
-import useUserProfile from 'src/hooks/queries/useUserProfile'
+
+// import useUserProfile from 'src/hooks/queries/useUserProfile'
 
 import ApplicationForm from 'src/@core/components/modal/ApplicationForm'
 
 const Dashboard = () => {
-  const { data: user } = useUserProfile()
+  // const { data: user } = useUserProfile()
+  const [open, setOpen] = useState(true)
 
-  console.log(user)
+  const handleApplicationForm = () => {
+    setOpen(!open)
+  }
 
   return (
     <ApexChartWrapper>
-      <ApplicationForm />
+      <ApplicationForm open={open} handleModal={handleApplicationForm} />
       <Grid container spacing={6}>
         <Grid item xs={12} md={4}>
           <Trophy />
@@ -28,7 +34,7 @@ const Dashboard = () => {
           <StatisticsCard />
         </Grid>
         <Grid item xs={12}>
-          <Table />
+          <Table handleModal={handleApplicationForm} />
         </Grid>
       </Grid>
     </ApexChartWrapper>
