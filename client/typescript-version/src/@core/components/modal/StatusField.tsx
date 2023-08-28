@@ -1,35 +1,51 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { statusColorOption, statusOptions } from 'src/static/statusOption'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { FormControl, Chip, InputLabel, MenuItem, Select, Divider, SelectChangeEvent } from '@mui/material'
 import dayjs from 'dayjs'
 import Grid from '@mui/material/Grid'
+import { initialStatusData } from './ApplicationForm'
+import DeleteIcon from '@mui/icons-material/Delete'
 
-const StatusField = () => {
-  const [selectedOptions, setSelectedOptions] = useState('')
+interface StatusFieldProps {
+  statusData: {
+    status: string
+    date: dayjs.Dayjs
+  }
+  updateStatusAtIndex: (updateStatus: typeof initialStatusData) => void
+  deleteStatusAtIndex: () => void
+}
 
-  const handleOptionSelect = (event: SelectChangeEvent<string>) => {
-    setSelectedOptions(event.target.value)
+const StatusField = ({ statusData, updateStatusAtIndex, deleteStatusAtIndex }: StatusFieldProps) => {
+  const handleStatusChange = (event: SelectChangeEvent<string>) => {
+    const newStatus = event.target.value as string
+    updateStatusAtIndex({ status: newStatus, date: statusData.date })
+  }
+
+  const handleDateChange = (date: dayjs.Dayjs | null) => {
+    // 날짜를 업데이트하기 위해 상태 업데이트 함수 호출
+    updateStatusAtIndex({ status: statusData.status, date: date || dayjs() })
   }
 
   return (
     <div>
-      <Grid container spacing={2}>
+      <Grid container spacing={2} alignItems='center'>
         <Grid item xs={12} sm={4}>
-          <FormControl required sx={{ m: 1, minWidth: 120 }} size='small'>
+          <FormControl required sx={{ m: 1, width: 170 }} size='medium'>
             <InputLabel>진행 상황</InputLabel>
             <Select
               label='진행'
-              value={selectedOptions}
-              onChange={handleOptionSelect}
+              value={statusData.status}
+              onChange={handleStatusChange}
               sx={{ textAlign: 'center' }}
               renderValue={() => (
                 <div>
                   <Chip
-                    label={selectedOptions}
-                    color={statusColorOption(selectedOptions)}
+                    label={statusData.status}
+                    color={statusColorOption(statusData.status)}
                     sx={{
                       height: 24,
+                      boxSizing: 'content-box',
                       fontSize: '0.75rem',
                       textTransform: 'capitalize',
                       '& .MuiChip-label': { fontWeight: 500 }
@@ -55,9 +71,13 @@ const StatusField = () => {
             sx={{
               width: '250px'
             }}
-            label='진행 날짜'
-            defaultValue={dayjs()}
+            label='진행 날짜 *'
+            defaultValue={statusData.date}
+            onChange={handleDateChange}
           />
+        </Grid>
+        <Grid item xs={2} sm={2}>
+          <DeleteIcon onClick={deleteStatusAtIndex} />
         </Grid>
       </Grid>
     </div>

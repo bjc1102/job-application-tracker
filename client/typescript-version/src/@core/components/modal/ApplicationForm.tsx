@@ -2,13 +2,20 @@ import React, { useState } from 'react'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
-import { Button, Dialog, DialogContent, Divider, InputAdornment, IconButton } from '@mui/material'
+import { Button, Dialog, DialogContent, Divider, InputAdornment, IconButton, useTheme } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import StatusField from './StatusField'
+import dayjs from 'dayjs'
+import { toast } from 'react-toastify'
 
 interface ApplicationFormProps {
   open: boolean
   handleModal: () => void
+}
+
+export const initialStatusData = {
+  status: '응답없음',
+  date: dayjs()
 }
 
 export default function ApplicationForm({ open, handleModal }: ApplicationFormProps) {
@@ -17,8 +24,9 @@ export default function ApplicationForm({ open, handleModal }: ApplicationFormPr
     title: '',
     platform: '',
     fileInfo: '',
-    status: []
+    status: [initialStatusData]
   })
+  const theme = useTheme()
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -27,6 +35,33 @@ export default function ApplicationForm({ open, handleModal }: ApplicationFormPr
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setApplication({ ...application, [name]: value })
+  }
+
+  const updateStatusAtIndex = (index: number) => (updateStatus: typeof initialStatusData) => {
+    setApplication(oldApplication => {
+      const updatedApplication = { ...oldApplication }
+      updatedApplication.status[index] = updateStatus
+
+      return updatedApplication
+    })
+  }
+
+  const deleteStatusAtIndex = (index: number) => () => {
+    setApplication(oldApplication => {
+      const updatedApplication = { ...oldApplication }
+      updatedApplication.status.splice(index, 1)
+
+      return updatedApplication
+    })
+  }
+
+  const addStatus = () => {
+    if (application.status.length > 6) return toast.error('최대 7개까지 추가 가능합니다', { theme: theme.palette.mode })
+
+    setApplication(oldApplication => ({
+      ...oldApplication,
+      status: [initialStatusData, ...oldApplication.status]
+    }))
   }
 
   console.log(application)
@@ -113,12 +148,20 @@ export default function ApplicationForm({ open, handleModal }: ApplicationFormPr
             <Typography variant='h6' gutterBottom style={{ fontWeight: 'bold', margin: 0 }}>
               진행 상황
             </Typography>
-            <Button sx={{ fontWeight: 'bold' }}>진행 상황 추가</Button>
+            <Button onClick={addStatus} sx={{ fontWeight: 'bold' }}>
+              진행 상황 추가
+            </Button>
           </Grid>
           <Grid container justifyContent='space-between' alignItems='center' sx={{ marginTop: '10px' }}>
-            <Grid item xs={12}>
-              <StatusField />
-            </Grid>
+            {application.status.map((status, idx) => (
+              <Grid item xs={12} key={idx} sx={{ marginTop: '10px' }}>
+                <StatusField
+                  statusData={status}
+                  updateStatusAtIndex={updateStatusAtIndex(idx)}
+                  deleteStatusAtIndex={deleteStatusAtIndex(idx)}
+                />
+              </Grid>
+            ))}
             <Grid item xs={12}>
               <Divider />
             </Grid>
