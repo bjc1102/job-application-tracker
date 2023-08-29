@@ -11,14 +11,16 @@ export const instance = axios.create({
 instance.interceptors.response.use(
   response => response,
   async error => {
-    if (error.response.status === 401) {
+    const { response, config } = error
+    if (response.status === 401) {
       try {
-        const response = await axios.get(`${baseURL}/auth/refresh`, {
+        await axios.get(`${baseURL}/auth/refresh`, {
           withCredentials: true
         })
-        console.log(response)
 
-        return Promise.resolve(response)
+        return instance(config)
+
+        //refresh 에러 발생시
       } catch (refreshError) {
         //@ts-ignore
         const path = refreshError.request.responseURL.match(/\/auth\/refresh$/)[0]
