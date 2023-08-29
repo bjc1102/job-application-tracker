@@ -14,9 +14,10 @@ interface StatusFieldProps {
   }
   updateStatusAtIndex: (updateStatus: typeof initialStatusData) => void
   deleteStatusAtIndex: () => void
+  index: number
 }
 
-const StatusField = ({ statusData, updateStatusAtIndex, deleteStatusAtIndex }: StatusFieldProps) => {
+const StatusField = ({ statusData, updateStatusAtIndex, deleteStatusAtIndex, index }: StatusFieldProps) => {
   const handleStatusChange = (event: SelectChangeEvent<string>) => {
     const newStatus = event.target.value as string
     updateStatusAtIndex({ status: newStatus, date: statusData.date })
@@ -77,7 +78,16 @@ const StatusField = ({ statusData, updateStatusAtIndex, deleteStatusAtIndex }: S
           />
         </Grid>
         <Grid item xs={2} sm={2}>
-          <DeleteIcon onClick={deleteStatusAtIndex} />
+          {index === 0 ? null : (
+            <DeleteIcon
+              onClick={deleteStatusAtIndex}
+              sx={{
+                ':hover': {
+                  cursor: 'pointer' // hover 시에 커서를 포인터로 변경
+                }
+              }}
+            />
+          )}
         </Grid>
       </Grid>
     </div>

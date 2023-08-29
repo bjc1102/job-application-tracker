@@ -7,6 +7,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import StatusField from './StatusField'
 import dayjs from 'dayjs'
 import { toast } from 'react-toastify'
+import { instance } from 'src/configs/axios'
 
 interface ApplicationFormProps {
   open: boolean
@@ -17,19 +18,54 @@ export const initialStatusData = {
   status: '응답없음',
   date: dayjs()
 }
+interface Application {
+  link: string
+  title: string
+  platform: string
+  fileInfo: string
+  status: typeof initialStatusData[]
+}
 
 export default function ApplicationForm({ open, handleModal }: ApplicationFormProps) {
-  const [application, setApplication] = useState({
+  const theme = useTheme()
+  const [application, setApplication] = useState<Application>({
     link: '',
     title: '',
     platform: '',
     fileInfo: '',
     status: [initialStatusData]
   })
-  const theme = useTheme()
+  const [error, setError] = useState<Partial<Application>>({})
+  function isValidUrl(url: string): boolean {
+    // URL 유효성을 검사하는 정규 표현식
+    const urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    return urlPattern.test(url)
+  }
+
+  const validate = () => {
+    const errors: Partial<Application> = {}
+
+    if (!application.link) errors.link = '채용 공고 링크는 필수 항목입니다.'
+    else if (!isValidUrl(application.link)) errors.link = '유효한 URL 형식이 아닙니다.'
+
+    if (!application.title) errors.title = '공고명은 필수 항목입니다.'
+    if (!application.platform) errors.platform = '플랫폼은 필수 항목입니다.'
+    if (!application.fileInfo) errors.fileInfo = '제출한 파일은 필수 항목입니다.'
+
+    setError(errors)
+
+    //에러가 없는지
+    return Object.keys(errors).length === 0
+  }
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    try {
+      if (!validate()) return
+      await instance.post('/application/test', application)
+    } catch (error) {
+      console.error('서버 요청 중 오류 발생:', error)
+    }
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -64,12 +100,10 @@ export default function ApplicationForm({ open, handleModal }: ApplicationFormPr
     }))
   }
 
-  console.log(application)
-
   return (
-    <form onSubmit={handleSubmit}>
-      <Dialog open={open}>
-        <DialogContent>
+    <Dialog open={open}>
+      <DialogContent>
+        <form onSubmit={handleSubmit}>
           <Grid container justifyContent='space-between' alignItems='center'>
             <Grid item>
               <Typography variant='h6' gutterBottom style={{ fontWeight: 'bold', margin: 0, color: 'text.primary' }}>
@@ -87,11 +121,11 @@ export default function ApplicationForm({ open, handleModal }: ApplicationFormPr
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                required
+                error={!!error.link}
                 id='link'
                 name='link'
                 label='채용 공고 링크'
-                helperText='채용공고 링크를 통해 채용 정보를 가져올 수 있습니다.'
+                helperText={!!error.link ? error.link : '채용공고 링크를 통해 채용 정보를 가져올 수 있습니다.'}
                 variant='standard'
                 value={application.link}
                 onChange={e => handleChange(e)}
@@ -109,7 +143,8 @@ export default function ApplicationForm({ open, handleModal }: ApplicationFormPr
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                required
+                error={!!error.title}
+                helperText={!!error.title && error.title}
                 id='title'
                 name='title'
                 label='공고명'
@@ -121,7 +156,7 @@ export default function ApplicationForm({ open, handleModal }: ApplicationFormPr
             <Grid item xs={12} md={5}>
               <TextField
                 fullWidth
-                required
+                error={!!error.platform}
                 id='platform'
                 name='platform'
                 label='플랫폼'
@@ -133,14 +168,14 @@ export default function ApplicationForm({ open, handleModal }: ApplicationFormPr
             <Grid item xs={12} md={7}>
               <TextField
                 fullWidth
-                required
+                error={!!error.fileInfo}
                 id='fileInfo'
                 name='fileInfo'
                 label='제출한 파일'
                 variant='standard'
                 value={application.fileInfo}
                 onChange={e => handleChange(e)}
-                helperText='제출한 파일은 ,로 구분'
+                helperText={!!error.fileInfo ? error.fileInfo : '제출한 파일은 ,로 구분'}
               />
             </Grid>
           </Grid>
@@ -156,6 +191,7 @@ export default function ApplicationForm({ open, handleModal }: ApplicationFormPr
             {application.status.map((status, idx) => (
               <Grid item xs={12} key={idx} sx={{ marginTop: '10px' }}>
                 <StatusField
+                  index={idx}
                   statusData={status}
                   updateStatusAtIndex={updateStatusAtIndex(idx)}
                   deleteStatusAtIndex={deleteStatusAtIndex(idx)}
@@ -171,8 +207,8 @@ export default function ApplicationForm({ open, handleModal }: ApplicationFormPr
               저장하기
             </Button>
           </Grid>
-        </DialogContent>
-      </Dialog>
-    </form>
+        </form>
+      </DialogContent>
+    </Dialog>
   )
 }
