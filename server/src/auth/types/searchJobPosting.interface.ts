@@ -1,4 +1,18 @@
+import dayjs from 'dayjs';
+
 export class searchJobPostingDTO {
-  // DTO 클래스의 속성은 요청 바디 데이터와 일치해야 합니다.
   readonly url: string;
+}
+
+export class applicationDataDTO {
+  link: string;
+  title: string;
+  platform: string;
+  fileInfo: string;
+  status: HistoryStatus[];
+}
+
+class HistoryStatus {
+  date: dayjs.Dayjs;
+  status: string;
 }

@@ -2,7 +2,7 @@ import { PrimaryGeneratedColumn, Entity, Column, OneToMany } from 'typeorm';
 import { RefreshTokenEntity } from './refreshToken.entity';
 import { ApplicationEntity } from './application.entity';
 
-@Entity({ name: 'User' })
+@Entity({ name: 'user' })
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id: number;

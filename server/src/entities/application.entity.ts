@@ -7,9 +7,9 @@ import {
   OneToMany,
 } from 'typeorm';
 import { UserEntity } from './user.entity';
-import { HistoryEntity } from './history.entity';
+import { HistoryStatusEntity } from './history.entity';
 
-@Entity({ name: 'Application' })
+@Entity({ name: 'application' })
 export class ApplicationEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -20,14 +20,8 @@ export class ApplicationEntity {
   @Column()
   link: string;
 
-  @Column({ name: 'start_date', type: 'date' })
-  start_date: Date;
-
-  @Column({ name: 'end_date', type: 'date', nullable: true, default: null })
-  end_date: Date | null;
-
-  @OneToMany(() => HistoryEntity, (history) => history.application)
-  histories: HistoryEntity[];
+  @OneToMany(() => HistoryStatusEntity, (history) => history.application)
+  histories: HistoryStatusEntity[];
 
   @ManyToOne(() => UserEntity, (user) => user.applications, {
     onDelete: 'CASCADE',

@@ -7,8 +7,8 @@ import {
 } from 'typeorm';
 import { ApplicationEntity } from './application.entity';
 
-@Entity({ name: 'History' })
-export class HistoryEntity {
+@Entity({ name: 'history' })
+export class HistoryStatusEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
