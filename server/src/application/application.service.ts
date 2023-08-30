@@ -32,5 +32,10 @@ export class ApplicationService {
   async saveUserApplicationData(
     user: { sub: string; email: string },
     applicationData: applicationDataDTO,
-  ) {}
+  ) {
+    this.applicationRepository.create({
+      title: applicationData.title,
+      link: applicationData.link,
+    });
+  }
 }
