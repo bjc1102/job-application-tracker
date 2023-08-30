@@ -93,8 +93,8 @@ export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
 
       setApplication(prevState => ({
         ...prevState,
-        title: response.data.ogTitle,
-        platform: response.data.ogSiteName
+        title: response.data.ogTitle ?? '',
+        platform: response.data.ogSiteName ?? ''
       }))
     } catch (error) {
       if (isAxiosError<ErrorResponseDataType>(error)) {
