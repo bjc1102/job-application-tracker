@@ -43,7 +43,7 @@ export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
     event.preventDefault()
     try {
       if (!validate()) {
-        await instance.post('/application/test', application)
+        await instance.post('/application/save', application)
         setError({})
       }
     } catch (error) {
@@ -89,13 +89,13 @@ export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
 
     try {
       const response = await getJobPostingData(application.link)
-      console.log(response)
 
       setApplication(prevState => ({
         ...prevState,
         title: response.data.ogTitle ?? '',
         platform: response.data.ogSiteName ?? ''
       }))
+      setError({})
     } catch (error) {
       if (isAxiosError<ErrorResponseDataType>(error)) {
         setError({
