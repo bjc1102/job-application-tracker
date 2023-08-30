@@ -25,7 +25,7 @@ const Dashboard = () => {
 
   return (
     <ApexChartWrapper>
-      <ApplicationForm open={open} handleModal={handleApplicationForm} />
+      {open && <ApplicationForm handleModal={handleApplicationForm} />}
       <Grid container spacing={6}>
         <Grid item xs={12} md={4}>
           <Trophy />

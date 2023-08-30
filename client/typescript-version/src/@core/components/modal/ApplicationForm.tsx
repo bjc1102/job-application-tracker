@@ -5,28 +5,20 @@ import TextField from '@mui/material/TextField'
 import { Button, Dialog, DialogContent, Divider, InputAdornment, IconButton, useTheme } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import StatusField from './StatusField'
-import dayjs from 'dayjs'
 import { toast } from 'react-toastify'
 import { instance } from 'src/configs/axios'
+import getJobPostingData from 'src/hooks/api/getJobPostingData'
+import { Application } from 'src/types/Application'
+import { initialStatusData } from 'src/static/initalData'
+import { validateApplication, validateURL } from 'src/@core/utils/validate'
+import { isAxiosError } from 'axios'
+import { ErrorResponseDataType } from 'src/types/ErrorResponseDataType'
 
 interface ApplicationFormProps {
-  open: boolean
   handleModal: () => void
 }
 
-export const initialStatusData = {
-  status: '응답없음',
-  date: dayjs()
-}
-interface Application {
-  link: string
-  title: string
-  platform: string
-  fileInfo: string
-  status: typeof initialStatusData[]
-}
-
-export default function ApplicationForm({ open, handleModal }: ApplicationFormProps) {
+export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
   const theme = useTheme()
   const [application, setApplication] = useState<Application>({
     link: '',
@@ -36,33 +28,24 @@ export default function ApplicationForm({ open, handleModal }: ApplicationFormPr
     status: [initialStatusData]
   })
   const [error, setError] = useState<Partial<Application>>({})
-  function isValidUrl(url: string): boolean {
-    // URL 유효성을 검사하는 정규 표현식
-    const urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i
-
-    return urlPattern.test(url)
-  }
 
   const validate = () => {
-    const errors: Partial<Application> = {}
+    const { isError, error } = validateApplication(application)
+    if (isError) {
+      setError(error)
 
-    if (!application.link) errors.link = '채용 공고 링크는 필수 항목입니다.'
-    else if (!isValidUrl(application.link)) errors.link = '유효한 URL 형식이 아닙니다.'
+      return true
+    }
 
-    if (!application.title) errors.title = '공고명은 필수 항목입니다.'
-    if (!application.platform) errors.platform = '플랫폼은 필수 항목입니다.'
-    if (!application.fileInfo) errors.fileInfo = '제출한 파일은 필수 항목입니다.'
-
-    setError(errors)
-
-    //에러가 없는지
-    return Object.keys(errors).length === 0
+    return false
   }
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     try {
-      if (!validate()) return
-      await instance.post('/application/test', application)
+      if (!validate()) {
+        await instance.post('/application/test', application)
+        setError({})
+      }
     } catch (error) {
       console.error('서버 요청 중 오류 발생:', error)
     }
@@ -100,8 +83,30 @@ export default function ApplicationForm({ open, handleModal }: ApplicationFormPr
     }))
   }
 
+  const fetchJobPostingData = async () => {
+    const error = validateURL(application.link)
+    if (error) return setError({ link: error })
+
+    try {
+      const response = await getJobPostingData(application.link)
+      console.log(response)
+
+      setApplication(prevState => ({
+        ...prevState,
+        title: response.data.ogTitle,
+        platform: response.data.ogSiteName
+      }))
+    } catch (error) {
+      if (isAxiosError<ErrorResponseDataType>(error)) {
+        setError({
+          link: error.response?.data.message
+        })
+      }
+    }
+  }
+
   return (
-    <Dialog open={open}>
+    <Dialog open>
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <Grid container justifyContent='space-between' alignItems='center'>
@@ -132,7 +137,7 @@ export default function ApplicationForm({ open, handleModal }: ApplicationFormPr
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>
-                      <Button type='submit' sx={{ fontWeight: 'bold' }}>
+                      <Button type='button' onClick={fetchJobPostingData} sx={{ fontWeight: 'bold' }}>
                         조회하기
                       </Button>
                     </InputAdornment>
@@ -171,7 +176,7 @@ export default function ApplicationForm({ open, handleModal }: ApplicationFormPr
                 error={!!error.fileInfo}
                 id='fileInfo'
                 name='fileInfo'
-                label='제출한 파일'
+                label='제출한 파일명'
                 variant='standard'
                 value={application.fileInfo}
                 onChange={e => handleChange(e)}
