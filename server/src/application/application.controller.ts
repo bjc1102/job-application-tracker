@@ -14,29 +14,17 @@ import {
   applicationDataDTO,
   searchJobPostingDTO,
 } from 'src/auth/types/searchJobPosting.interface';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/entities/user.entity';
-import { Repository } from 'typeorm';
-import { ApplicationEntity } from 'src/entities/application.entity';
-import { HistoryStatusEntity } from 'src/entities/history.entity';
 
 @Controller('/application')
 export class ApplicationController {
-  constructor(
-    private readonly applicationService: ApplicationService,
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
-    @InjectRepository(ApplicationEntity)
-    private readonly applicationRepository: Repository<ApplicationEntity>,
-    @InjectRepository(HistoryStatusEntity)
-    private readonly historyStatusApplication: Repository<HistoryStatusEntity>,
-  ) {}
+  constructor(private readonly applicationService: ApplicationService) {}
   @Post('/save')
   @UseGuards(AuthGuard('jwt'))
   async saveApplicationData(
     @User() payload: JwtPayload,
     @Body() applicationData: applicationDataDTO,
   ) {
+    console.log(payload);
     console.log(applicationData);
   }
 
