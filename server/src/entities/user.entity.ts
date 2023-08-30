@@ -16,9 +16,13 @@ export class UserEntity {
   @Column()
   imageUrl: string;
 
-  @OneToMany(() => RefreshTokenEntity, (token) => token.user)
+  @OneToMany(() => RefreshTokenEntity, (token) => token.user, {
+    onDelete: 'CASCADE',
+  })
   refreshTokens: RefreshTokenEntity[];
 
-  @OneToMany(() => ApplicationEntity, (application) => application.user)
+  @OneToMany(() => ApplicationEntity, (application) => application.user, {
+    onDelete: 'CASCADE',
+  })
   applications: ApplicationEntity[];
 }
