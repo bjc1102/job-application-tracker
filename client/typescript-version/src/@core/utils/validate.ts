@@ -15,7 +15,7 @@ export const validateApplication = (application: Application) => {
 
   if (!application.title) errors.title = '공고명은 필수 항목입니다.'
   if (!application.platform) errors.platform = '플랫폼은 필수 항목입니다.'
-  if (!application.fileInfo) errors.fileInfo = '제출한 파일은 필수 항목입니다.'
+  if (!application.files) errors.files = '제출한 파일은 필수 항목입니다.'
 
   //0이면 false
   return { isError: Object.keys(errors).length !== 0, error: errors }

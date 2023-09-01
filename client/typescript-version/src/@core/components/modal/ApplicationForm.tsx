@@ -24,7 +24,7 @@ export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
     link: '',
     title: '',
     platform: '',
-    fileInfo: '',
+    files: '',
     status: [initialStatusData]
   })
   const [error, setError] = useState<Partial<Application>>({})
@@ -173,14 +173,14 @@ export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
             <Grid item xs={12} md={7}>
               <TextField
                 fullWidth
-                error={!!error.fileInfo}
-                id='fileInfo'
-                name='fileInfo'
+                error={!!error.files}
+                id='files'
+                name='files'
                 label='제출한 파일명'
                 variant='standard'
-                value={application.fileInfo}
+                value={application.files}
                 onChange={e => handleChange(e)}
-                helperText={!!error.fileInfo ? error.fileInfo : '제출한 파일은 ,로 구분'}
+                helperText={!!error.files ? error.files : '제출한 파일은 ,로 구분'}
               />
             </Grid>
           </Grid>

@@ -4,6 +4,6 @@ export interface Application {
   link: string
   title: string
   platform: string
-  fileInfo: string
+  files: string
   status: typeof initialStatusData[]
 }
