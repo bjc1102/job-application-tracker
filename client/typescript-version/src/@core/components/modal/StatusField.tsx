@@ -4,7 +4,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { FormControl, Chip, InputLabel, MenuItem, Select, Divider, SelectChangeEvent } from '@mui/material'
 import dayjs from 'dayjs'
 import Grid from '@mui/material/Grid'
-import { initialStatusData } from './ApplicationForm'
+import { initialStatusData } from 'src/static/initalData'
 import DeleteIcon from '@mui/icons-material/Delete'
 
 interface StatusFieldProps {
