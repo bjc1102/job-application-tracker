@@ -24,8 +24,10 @@ export class ApplicationController {
     @User() payload: JwtPayload,
     @Body() applicationData: applicationDataDTO,
   ) {
-    console.log(payload);
-    console.log(applicationData);
+    const result = await this.applicationService.saveUserApplicationData(
+      { sub: payload.sub, email: payload.email },
+      applicationData,
+    );
   }
 
   @Post('/jobposting')

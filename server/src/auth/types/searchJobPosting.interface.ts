@@ -8,11 +8,11 @@ export class applicationDataDTO {
   link: string;
   title: string;
   platform: string;
-  fileInfo: string;
+  files: string;
   status: HistoryStatus[];
 }
 
 class HistoryStatus {
-  date: dayjs.Dayjs;
+  date: string;
   status: string;
 }
