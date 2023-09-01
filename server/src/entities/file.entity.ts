@@ -9,6 +9,8 @@ export class FileEntity {
   @Column({ name: 'file_info' })
   file_info: string;
 
-  @ManyToOne(() => ApplicationEntity, (application) => application.files)
+  @ManyToOne(() => ApplicationEntity, (application) => application.files, {
+    onDelete: 'CASCADE',
+  })
   application: ApplicationEntity;
 }

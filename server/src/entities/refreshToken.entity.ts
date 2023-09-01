@@ -18,7 +18,9 @@ export class RefreshTokenEntity {
   @Column()
   exp: number;
 
-  @ManyToOne(() => UserEntity, (user) => user.refreshTokens)
+  @ManyToOne(() => UserEntity, (user) => user.refreshTokens, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
   user: UserEntity;
 }

@@ -18,7 +18,9 @@ export class HistoryStatusEntity {
   @Column({ name: 'status_create_date', type: 'date' })
   status_create_date: Date;
 
-  @ManyToOne(() => ApplicationEntity, (application) => application.histories)
+  @ManyToOne(() => ApplicationEntity, (application) => application.histories, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'application_id', referencedColumnName: 'id' })
   application: ApplicationEntity;
 }
