@@ -8,10 +8,9 @@ import { JwtPayload } from 'src/auth/types/token.interface';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('test')
+  @Get()
   @UseGuards(AuthGuard('jwt'))
   async getUserData(@User() payload: JwtPayload) {
-    console.log(payload);
     return await this.userService.findUserData(payload.email);
   }
 }

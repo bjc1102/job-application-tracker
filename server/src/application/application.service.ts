@@ -88,4 +88,18 @@ export class ApplicationService {
       await queryRunner.release();
     }
   }
+
+  async getApplicationData(user: Partial<JwtPayload>) {
+    const userApplications = await this.applicationRepository.find({
+      where: { user: { id: user.sub } },
+      relations: ['histories', 'files'],
+      order: {
+        histories: {
+          status_create_date: 'DESC',
+        },
+      },
+    });
+
+    return userApplications;
+  }
 }

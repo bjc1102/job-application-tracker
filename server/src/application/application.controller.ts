@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpException,
   HttpStatus,
   Post,
@@ -54,5 +55,15 @@ export class ApplicationController {
         },
       );
     }
+  }
+
+  @Get('/user/applicationList')
+  @UseGuards(AuthGuard('jwt'))
+  async getUserApplicationData(@User() payload: JwtPayload) {
+    const result = await this.applicationService.getApplicationData({
+      sub: payload.sub,
+    });
+
+    return result;
   }
 }
