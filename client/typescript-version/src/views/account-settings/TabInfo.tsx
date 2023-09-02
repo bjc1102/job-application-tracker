@@ -1,6 +1,3 @@
-// ** React Imports
-import { forwardRef, useState } from 'react'
-
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
 import Radio from '@mui/material/Radio'
@@ -17,19 +14,12 @@ import OutlinedInput from '@mui/material/OutlinedInput'
 import FormControlLabel from '@mui/material/FormControlLabel'
 
 // ** Third Party Imports
-import DatePicker from 'react-datepicker'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 
 // ** Styled Components
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 
-const CustomInput = forwardRef((props, ref) => {
-  return <TextField inputRef={ref} label='Birth Date' fullWidth {...props} />
-})
-
 const TabInfo = () => {
-  // ** State
-  const [date, setDate] = useState<Date | null | undefined>(null)
-
   return (
     <CardContent>
       <form>
@@ -46,15 +36,7 @@ const TabInfo = () => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <DatePickerWrapper>
-              <DatePicker
-                selected={date}
-                showYearDropdown
-                showMonthDropdown
-                id='account-settings-date'
-                placeholderText='MM-DD-YYYY'
-                customInput={<CustomInput />}
-                onChange={(date: Date) => setDate(date)}
-              />
+              <DatePicker />
             </DatePickerWrapper>
           </Grid>
           <Grid item xs={12} sm={6}>
@@ -112,9 +94,6 @@ const TabInfo = () => {
           <Grid item xs={12}>
             <Button variant='contained' sx={{ marginRight: 3.5 }}>
               Save Changes
-            </Button>
-            <Button type='reset' variant='outlined' color='secondary' onClick={() => setDate(null)}>
-              Reset
             </Button>
           </Grid>
         </Grid>

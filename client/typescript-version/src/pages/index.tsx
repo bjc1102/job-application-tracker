@@ -13,7 +13,7 @@ import StatisticsCard from 'src/views/dashboard/StatisticsCard'
 
 // import useUserProfile from 'src/hooks/queries/useUserProfile'
 
-import ApplicationForm from 'src/@core/components/modal/ApplicationForm'
+import ApplicationForm from 'src/views/modal/ApplicationForm'
 
 const Dashboard = () => {
   // const { data: user } = useUserProfile()
