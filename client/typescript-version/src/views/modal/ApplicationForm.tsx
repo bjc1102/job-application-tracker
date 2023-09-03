@@ -13,12 +13,15 @@ import { initialStatusData } from 'src/static/initalData'
 import { validateApplication, validateURL } from 'src/@core/utils/validate'
 import { isAxiosError } from 'axios'
 import { ErrorResponseDataType } from 'src/types/ErrorResponseDataType'
+import { useQueryClient } from '@tanstack/react-query'
+import { userApplications } from 'src/static/key'
 
 interface ApplicationFormProps {
   handleModal: () => void
 }
 
 export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
+  const queryClient = useQueryClient()
   const theme = useTheme()
   const [application, setApplication] = useState<Application>({
     link: '',
@@ -45,9 +48,11 @@ export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
       if (!validate()) {
         await instance.post('/application/save', application)
         setError({})
+        queryClient.invalidateQueries({ queryKey: [userApplications] })
+        handleModal()
       }
     } catch (error) {
-      console.error('서버 요청 중 오류 발생:', error)
+      toast.error('서버 요청 중 오류 발생하였습니다')
     }
   }
 
