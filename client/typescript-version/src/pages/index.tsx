@@ -7,21 +7,17 @@ import Grid from '@mui/material/Grid'
 import ApexChartWrapper from 'src/@core/styles/libs/react-apexcharts'
 
 // ** Demo Components Imports
-import Table from 'src/views/dashboard/Table'
 import Trophy from 'src/views/dashboard/Trophy'
 import StatisticsCard from 'src/views/dashboard/StatisticsCard'
 
 import useUserProfile from 'src/hooks/queries/useUserProfile'
 
 import ApplicationForm from 'src/views/modal/ApplicationForm'
-import useUserApplicationList from 'src/hooks/queries/useUserApplicationList'
+import ApplicationTable from 'src/views/dashboard/ApplicationTable'
 
 const Dashboard = () => {
   useUserProfile()
   const [open, setOpen] = useState(true)
-  const { data } = useUserApplicationList()
-
-  console.log(data)
 
   const handleApplicationForm = () => {
     setOpen(!open)
@@ -38,7 +34,7 @@ const Dashboard = () => {
           <StatisticsCard />
         </Grid>
         <Grid item xs={12}>
-          <Table handleModal={handleApplicationForm} />
+          <ApplicationTable handleModal={handleApplicationForm} />
         </Grid>
       </Grid>
     </ApexChartWrapper>

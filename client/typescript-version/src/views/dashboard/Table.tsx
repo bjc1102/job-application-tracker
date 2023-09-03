@@ -124,12 +124,11 @@ const DashboardTable = ({ handleModal }: DashboardTableProps) => {
         <Table sx={{ minWidth: 800 }} aria-label='table in dashboard'>
           <TableHead>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Salary</TableCell>
-              <TableCell>Age</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell>공고명</TableCell>
+              <TableCell>지원 플랫폼</TableCell>
+              <TableCell>제출한 파일</TableCell>
+              <TableCell>진행상황</TableCell>
+              <TableCell>진행일자</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -144,7 +143,6 @@ const DashboardTable = ({ handleModal }: DashboardTableProps) => {
                 <TableCell>{row.email}</TableCell>
                 <TableCell>{row.date}</TableCell>
                 <TableCell>{row.salary}</TableCell>
-                <TableCell>{row.age}</TableCell>
                 <TableCell>
                   <Chip
                     label={row.status}
