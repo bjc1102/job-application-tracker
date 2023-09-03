@@ -76,8 +76,6 @@ const Row = (props: { row: ReturnType<typeof createData> }) => {
                   <TableRow>
                     <TableCell>Date</TableCell>
                     <TableCell>Customer</TableCell>
-                    <TableCell align='right'>Amount</TableCell>
-                    <TableCell align='right'>Total price ($)</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -87,8 +85,6 @@ const Row = (props: { row: ReturnType<typeof createData> }) => {
                         {historyRow.date}
                       </TableCell>
                       <TableCell>{historyRow.customerId}</TableCell>
-                      <TableCell align='right'>{historyRow.amount}</TableCell>
-                      <TableCell align='right'>{Math.round(historyRow.amount * row.price * 100) / 100}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
