@@ -49,6 +49,7 @@ export class ApplicationService {
       const application = this.applicationRepository.create({
         title: applicationData.title,
         link: applicationData.link,
+        platform: applicationData.platform,
         user: {
           id: user.sub,
         },

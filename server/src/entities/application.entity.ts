@@ -21,6 +21,9 @@ export class ApplicationEntity {
   @Column()
   link: string;
 
+  @Column()
+  platform: string;
+
   @OneToMany(() => FileEntity, (file) => file.application)
   files: FileEntity[];
 
