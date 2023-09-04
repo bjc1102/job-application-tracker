@@ -103,4 +103,31 @@ export class ApplicationService {
 
     return userApplications;
   }
+
+  async deleteApplicationData(user: Partial<JwtPayload>, id: number) {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    // 트랜잭션 시작
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      // 지원서찾기
+      const applicationToDelete = await this.applicationRepository.findOne({
+        where: { id, user: { id: user.sub } },
+      });
+
+      if (!applicationToDelete) throw new Error('지원서 정보가 없습니다.');
+
+      // 지원서 삭제
+      await this.applicationRepository.remove(applicationToDelete);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+      throw err;
+    } finally {
+      await queryRunner.release();
+    }
+  }
 }

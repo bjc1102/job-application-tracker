@@ -1,9 +1,11 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpException,
   HttpStatus,
+  Param,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -25,10 +27,21 @@ export class ApplicationController {
     @User() payload: JwtPayload,
     @Body() applicationData: applicationDataDTO,
   ) {
-    const result = await this.applicationService.saveUserApplicationData(
-      { sub: payload.sub, email: payload.email },
-      applicationData,
-    );
+    try {
+      await this.applicationService.saveUserApplicationData(
+        { sub: payload.sub, email: payload.email },
+        applicationData,
+      );
+      return { success: true, message: '저장되었습니다.' };
+    } catch (err) {
+      throw new HttpException(
+        {
+          success: false,
+          message: err.message,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Post('/jobposting')
@@ -65,5 +78,32 @@ export class ApplicationController {
     });
 
     return result;
+  }
+
+  @Delete('/user/application/:id')
+  @UseGuards(AuthGuard('jwt'))
+  async deleteUserApplicationData(
+    @Param('id') id: number,
+    @User() payload: JwtPayload,
+  ) {
+    try {
+      console.log(payload);
+      await this.applicationService.deleteApplicationData(
+        {
+          sub: payload.sub,
+        },
+        id,
+      );
+
+      return { success: true, message: '지원서가 삭제되었습니다.' };
+    } catch (error) {
+      throw new HttpException(
+        {
+          success: false,
+          message: error.message,
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 }
