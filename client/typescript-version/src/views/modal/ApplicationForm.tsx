@@ -21,6 +21,7 @@ interface ApplicationFormProps {
 }
 
 export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
+  // ** State
   const queryClient = useQueryClient()
   const theme = useTheme()
   const [application, setApplication] = useState<Application>({
@@ -32,6 +33,7 @@ export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
   })
   const [error, setError] = useState<Partial<Application>>({})
 
+  // ** validate form
   const validate = () => {
     const { isError, error } = validateApplication(application)
     if (isError) {
@@ -42,6 +44,8 @@ export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
 
     return false
   }
+
+  // ** handle form
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     try {
@@ -61,6 +65,7 @@ export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
     setApplication({ ...application, [name]: value })
   }
 
+  // ** handle status
   const updateStatusAtIndex = (index: number) => (updateStatus: typeof initialStatusData) => {
     setApplication(oldApplication => {
       const updatedApplication = { ...oldApplication }
@@ -88,6 +93,7 @@ export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
     }))
   }
 
+  // ** fetch
   const fetchJobPostingData = async () => {
     const error = validateURL(application.link)
     if (error) return setError({ link: error })
