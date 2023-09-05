@@ -15,7 +15,7 @@ import TableContainer from '@mui/material/TableContainer'
 import Paper from '@mui/material/Paper'
 
 // ** Types Imports
-import { Button, Collapse, Grid, IconButton } from '@mui/material'
+import { Button, Collapse, Divider, Grid, IconButton } from '@mui/material'
 import useUserApplicationList from 'src/hooks/queries/useUserApplicationList'
 import { UserApplicationType } from 'src/types/Application'
 import { statusColorOption } from 'src/static/statusOption'
@@ -31,6 +31,7 @@ import AlertDialog from 'src/@core/components/alert-dialog/AlertDialog'
 import deleteUserApplicationData from 'src/api/deleteUserApplicationData'
 import { useQueryClient } from '@tanstack/react-query'
 import { userApplications } from 'src/static/key'
+import ApplicationForm from '../modal/ApplicationForm'
 
 interface DashboardTableProps {
   handleModal: () => void
@@ -44,6 +45,7 @@ const Row = ({ application }: RowProps) => {
   // ** State
   const [collapseOpen, setCollapseOpen] = useState(false)
   const [alertDialogOpen, setAlertDialogOpen] = useState(false)
+  const [applicationFormOpen, setApplicationFormOpen] = useState(false)
   const queryClient = useQueryClient()
 
   // ** AlertDialog
@@ -65,6 +67,12 @@ const Row = ({ application }: RowProps) => {
         toast.error('서버와 통신 중 에러가 발생했습니다.')
       }
     }
+  }
+
+  // ** ApplicationForm Dialog
+
+  const handleApplicationFormDialog = () => {
+    setApplicationFormOpen(!applicationFormOpen)
   }
 
   return (
@@ -102,10 +110,11 @@ const Row = ({ application }: RowProps) => {
           <Collapse in={collapseOpen} timeout='auto'>
             <Grid container spacing={6}>
               <Grid item sx={{ mx: 13, my: 4 }}>
-                <Box sx={{ mx: 4 }}>
+                <Box sx={{ mx: 4 }}></Box>
+                <Box sx={{ m: 4 }}>
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant='h6' gutterBottom component='div'>
-                      Files
+                      History
                     </Typography>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1 }}>
                       <Button
@@ -113,6 +122,7 @@ const Row = ({ application }: RowProps) => {
                         size='small'
                         startIcon={<Pencil />}
                         sx={{ '&:hover': { cursor: 'pointer' } }}
+                        onClick={handleApplicationFormDialog}
                       >
                         수정하기
                       </Button>
@@ -127,17 +137,7 @@ const Row = ({ application }: RowProps) => {
                       </Button>
                     </Box>
                   </Box>
-                  {application.files.map((v, index) => (
-                    <span key={index}>
-                      {v.file_info}
-                      {index < application.files.length - 1 && ', '}
-                    </span>
-                  ))}
-                </Box>
-                <Box sx={{ m: 4 }}>
-                  <Typography variant='h6' gutterBottom component='div'>
-                    History
-                  </Typography>
+                  <Divider variant='inset' sx={{ mb: 10 }} />
                   <Table size='small' aria-label='purchases'>
                     <TableHead>
                       <TableRow>
@@ -205,12 +205,17 @@ const Row = ({ application }: RowProps) => {
         handleDisagree={handleDialogDisagree}
         handleAgree={handleDialogAgree}
       />
+      {applicationFormOpen && (
+        <ApplicationForm applicationData={application} handleModal={handleApplicationFormDialog} />
+      )}
     </Fragment>
   )
 }
 
 const ApplicationTable = ({ handleModal }: DashboardTableProps) => {
   const { data: applications } = useUserApplicationList()
+
+  console.log(applications)
 
   return (
     <Paper sx={{ borderRadius: '0px', width: '100%', overflow: 'hidden' }}>
