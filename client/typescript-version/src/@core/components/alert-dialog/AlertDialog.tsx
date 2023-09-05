@@ -22,8 +22,10 @@ export default function AlertDialog({ title, content, isOpen, handleAgree, handl
         <DialogContentText id='alert-dialog-description'>{content}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleAgree}>확인</Button>
-        <Button onClick={handleDisagree} autoFocus>
+        <Button color='primary' onClick={handleAgree}>
+          확인
+        </Button>
+        <Button color='secondary' onClick={handleDisagree} autoFocus>
           취소
         </Button>
       </DialogActions>
