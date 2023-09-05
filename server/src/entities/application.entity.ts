@@ -8,7 +8,6 @@ import {
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { HistoryStatusEntity } from './history.entity';
-import { FileEntity } from './file.entity';
 
 @Entity({ name: 'application' })
 export class ApplicationEntity {
@@ -23,9 +22,6 @@ export class ApplicationEntity {
 
   @Column()
   platform: string;
-
-  @OneToMany(() => FileEntity, (file) => file.application)
-  files: FileEntity[];
 
   @OneToMany(() => HistoryStatusEntity, (history) => history.application)
   histories: HistoryStatusEntity[];

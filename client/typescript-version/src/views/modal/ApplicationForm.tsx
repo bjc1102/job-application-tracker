@@ -8,7 +8,7 @@ import StatusField from './StatusField'
 import { toast } from 'react-toastify'
 import { instance } from 'src/configs/axios'
 import getJobPostingData from 'src/api/getJobPostingData'
-import { Application } from 'src/types/Application'
+import { Application, UserApplicationType } from 'src/types/Application'
 import { initialStatusData } from 'src/static/initalData'
 import { validateApplication, validateURL } from 'src/@core/utils/validate'
 import { isAxiosError } from 'axios'
@@ -17,18 +17,18 @@ import { useQueryClient } from '@tanstack/react-query'
 import { userApplications } from 'src/static/key'
 
 interface ApplicationFormProps {
+  applicationData?: UserApplicationType
   handleModal: () => void
 }
 
-export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
+export default function ApplicationForm({ applicationData, handleModal }: ApplicationFormProps) {
   // ** State
   const queryClient = useQueryClient()
   const theme = useTheme()
   const [application, setApplication] = useState<Application>({
-    link: '',
-    title: '',
-    platform: '',
-    files: '',
+    link: applicationData?.link ?? '',
+    title: applicationData?.title ?? '',
+    platform: applicationData?.platform ?? '',
     status: [initialStatusData]
   })
   const [error, setError] = useState<Partial<Application>>({})
@@ -169,7 +169,7 @@ export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
                 onChange={e => handleChange(e)}
               />
             </Grid>
-            <Grid item xs={12} md={5}>
+            <Grid item xs={12} md={12}>
               <TextField
                 fullWidth
                 error={!!error.platform}
@@ -179,19 +179,6 @@ export default function ApplicationForm({ handleModal }: ApplicationFormProps) {
                 variant='standard'
                 value={application.platform}
                 onChange={e => handleChange(e)}
-              />
-            </Grid>
-            <Grid item xs={12} md={7}>
-              <TextField
-                fullWidth
-                error={!!error.files}
-                id='files'
-                name='files'
-                label='제출한 파일명'
-                variant='standard'
-                value={application.files}
-                onChange={e => handleChange(e)}
-                helperText={!!error.files ? error.files : '제출한 파일은 ,로 구분'}
               />
             </Grid>
           </Grid>

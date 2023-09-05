@@ -6,7 +6,6 @@ import { UserEntity } from 'src/entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import { ApplicationEntity } from 'src/entities/application.entity';
 import { HistoryStatusEntity } from 'src/entities/history.entity';
-import { FileEntity } from 'src/entities/file.entity';
 import { JwtPayload } from 'src/auth/types/token.interface';
 import dayjs from 'dayjs';
 
@@ -19,8 +18,6 @@ export class ApplicationService {
     private readonly applicationRepository: Repository<ApplicationEntity>,
     @InjectRepository(HistoryStatusEntity)
     private readonly historyStatusRepository: Repository<HistoryStatusEntity>,
-    @InjectRepository(FileEntity)
-    private readonly fileRepository: Repository<FileEntity>,
     private readonly dataSource: DataSource,
   ) {}
   async getJobPostingOpenGraphData(url: string) {
@@ -71,15 +68,6 @@ export class ApplicationService {
         return historyStatus;
       });
 
-      const fileData = applicationData.files.split(',').map((file) => {
-        const fileName = file.trim();
-        return this.fileRepository.create({
-          file_info: fileName,
-          application: { id: savedApplication.id },
-        });
-      });
-
-      await this.fileRepository.save(fileData);
       await this.historyStatusRepository.save(historiesStatus);
 
       await queryRunner.commitTransaction();
@@ -93,7 +81,7 @@ export class ApplicationService {
   async getApplicationData(user: Partial<JwtPayload>) {
     const userApplications = await this.applicationRepository.find({
       where: { user: { id: user.sub } },
-      relations: ['histories', 'files'],
+      relations: ['histories'],
       order: {
         histories: {
           status_create_date: 'DESC',

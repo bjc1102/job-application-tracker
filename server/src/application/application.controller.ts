@@ -87,7 +87,6 @@ export class ApplicationController {
     @User() payload: JwtPayload,
   ) {
     try {
-      console.log(payload);
       await this.applicationService.deleteApplicationData(
         {
           sub: payload.sub,
