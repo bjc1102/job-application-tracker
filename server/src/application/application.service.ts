@@ -47,6 +47,7 @@ export class ApplicationService {
         title: applicationData.title,
         link: applicationData.link,
         platform: applicationData.platform,
+        note: applicationData.note,
         user: {
           id: user.sub,
         },

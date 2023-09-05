@@ -8,7 +8,7 @@ export class applicationDataDTO {
   link: string;
   title: string;
   platform: string;
-  files: string;
+  note: string;
   status: HistoryStatus[];
 }
 

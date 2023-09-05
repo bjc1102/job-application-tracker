@@ -29,7 +29,8 @@ export default function ApplicationForm({ applicationData, handleModal }: Applic
     link: applicationData?.link ?? '',
     title: applicationData?.title ?? '',
     platform: applicationData?.platform ?? '',
-    status: [initialStatusData]
+    status: [initialStatusData],
+    note: applicationData?.note ?? ''
   })
   const [error, setError] = useState<Partial<Application>>({})
 
@@ -133,7 +134,7 @@ export default function ApplicationForm({ applicationData, handleModal }: Applic
             </Grid>
           </Grid>
           <Divider />
-          <Grid container justifyContent='space-between' spacing={3}>
+          <Grid container justifyContent='space-between' spacing={3} sx={{ mb: 6 }}>
             <Grid item xs={12}>
               <TextField
                 fullWidth
@@ -178,6 +179,17 @@ export default function ApplicationForm({ applicationData, handleModal }: Applic
                 label='플랫폼'
                 variant='standard'
                 value={application.platform}
+                onChange={e => handleChange(e)}
+              />
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <TextField
+                fullWidth
+                id='note'
+                name='note'
+                label='메모'
+                variant='standard'
+                value={application.note}
                 onChange={e => handleChange(e)}
               />
             </Grid>

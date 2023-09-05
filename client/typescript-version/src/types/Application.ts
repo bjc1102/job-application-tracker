@@ -4,6 +4,7 @@ export interface Application {
   link: string
   title: string
   platform: string
+  note: string
   status: typeof initialStatusData[]
 }
 
@@ -18,5 +19,6 @@ export interface UserApplicationType {
   title: string
   link: string
   platform: string
+  note: string
   histories: history[]
 }

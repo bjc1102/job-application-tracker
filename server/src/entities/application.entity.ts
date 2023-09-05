@@ -5,11 +5,9 @@ import {
   ManyToOne,
   JoinColumn,
   OneToMany,
-  OneToOne,
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { HistoryStatusEntity } from './history.entity';
-import { NoteEntity } from './note.entity';
 
 @Entity({ name: 'application' })
 export class ApplicationEntity {
@@ -25,8 +23,8 @@ export class ApplicationEntity {
   @Column()
   platform: string;
 
-  @OneToOne(() => NoteEntity, (note) => note.application)
-  note: NoteEntity;
+  @Column()
+  note: string;
 
   @OneToMany(() => HistoryStatusEntity, (history) => history.application)
   histories: HistoryStatusEntity[];
